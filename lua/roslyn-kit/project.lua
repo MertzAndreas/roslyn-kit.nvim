@@ -2,7 +2,7 @@ local M = {}
 
 ---@param bufnr number
 ---@param client vim.lsp.Client
----@param cb fun(csproj_path: string|nil)
+---@param cb fun(csproj_path: string|nil, err : string|nil)
 function M.get_csproj(bufnr, client, cb)
 	local params = { _vs_textDocument = { uri = vim.uri_from_bufnr(bufnr) } }
 	client:request("textDocument/_vs_getProjectContexts", params, function(err, result)
@@ -31,6 +31,23 @@ function M.find_sln(csproj_path)
 		return nil, "No .sln/.slnx found above " .. csproj_path
 	end
 	return result[1], nil
+end
+
+---@return string|nil
+function M.find_cs_file()
+	local found = vim.fs.find(function(name)
+		return name:match("%.cs$")
+	end, { path = vim.uv.cwd(), type = "file", limit = 1 })
+	return found[1]
+end
+
+--- Check if cwd contains a C# project without needing an LSP client
+---@return boolean
+function M.in_csharp_project()
+	local found = vim.fs.find(function(name)
+		return name:match("%.slnx?$") or name:match("%.csproj$")
+	end, { path = vim.uv.cwd(), type = "file", limit = 1 })
+	return #found > 0
 end
 
 ---@param sln_path string

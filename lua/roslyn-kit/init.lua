@@ -136,6 +136,8 @@ local function setup_buffer_autocmds(client, buf)
 end
 
 local function setup_keymaps(client, buf)
+	---@param fn fun(s: RoslynState)
+	---@return function
 	local function with_state(fn)
 		return function()
 			get_or_init_state(client.id, buf, client, fn)
@@ -171,8 +173,29 @@ local function setup_keymaps(client, buf)
 end
 
 function M.setup()
-	-- Clear stale state when the LSP client detaches
+	vim.api.nvim_create_autocmd("VimEnter", {
+		once = true,
+		desc = "Initialise roslyn early if in cs file",
+		callback = function()
+			vim.schedule(function()
+				if not project.in_csharp_project() then
+					return
+				end
+				local cs_file = project.find_cs_file()
+				if not cs_file then
+					return
+				end
+
+				local buf = vim.fn.bufadd(cs_file)
+				vim.bo[buf].buflisted = false
+				vim.fn.bufload(buf)
+				vim.bo[buf].filetype = "cs"
+			end)
+		end,
+	})
+
 	vim.api.nvim_create_autocmd("LspDetach", {
+		desc = "Clear state",
 		callback = function(args)
 			state_store.clear(args.data.client_id)
 		end,
