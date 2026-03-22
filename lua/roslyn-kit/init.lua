@@ -2,6 +2,7 @@ local state_store = require("roslyn-kit.state")
 local project = require("roslyn-kit.project")
 local build = require("roslyn-kit.build")
 local test = require("roslyn-kit.test")
+local nuget = require("roslyn-kit.nuget")
 
 local M = {}
 
@@ -151,6 +152,15 @@ local function setup_keymaps(client, buf)
 			build.build_diagnostics(s.sln)
 		end),
 		{ buffer = buf, desc = "roslyn-tools: Solution warnings" }
+	)
+
+	vim.keymap.set(
+		"n",
+		"<leader>tn",
+		with_state(function(s)
+			nuget.install_package(s.all_projects)
+		end),
+		{ buffer = buf, desc = "roslyn-tools: Search nuget packages" }
 	)
 
 	vim.keymap.set(
