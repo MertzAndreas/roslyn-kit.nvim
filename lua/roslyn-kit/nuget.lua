@@ -20,7 +20,7 @@ M.install_package = function(projects)
 		live = true,
 		supports_live = true,
 		preview = "preview",
-		format = function(item, _picker)
+		format = function(item, _)
 			local pkg = item.item
 			local verified = pkg.verified and " ✓" or ""
 			return {

@@ -78,15 +78,15 @@ local function setup_buffer_autocmds(client, buf)
 		end,
 	})
 
-	-- Codelens refresh
-	vim.api.nvim_create_autocmd({ "BufEnter", "InsertLeave" }, {
-		group = augroup,
-		buffer = buf,
-		callback = function()
-			vim.lsp.codelens.refresh()
-		end,
-	})
-
+	-- -- Codelens refresh
+	-- vim.api.nvim_create_autocmd({ "BufEnter", "InsertLeave" }, {
+	-- 	group = augroup,
+	-- 	buffer = buf,
+	-- 	callback = function()
+	-- 		vim.lsp.codelens.refresh()
+	-- 	end,
+	-- })
+	--
 	-- XML doc comment expansion on ///
 	vim.api.nvim_create_autocmd("InsertCharPre", {
 		group = augroup,
