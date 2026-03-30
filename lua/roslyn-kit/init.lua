@@ -198,6 +198,7 @@ function M.setup()
 
 				local buf = vim.fn.bufadd(cs_file)
 				vim.bo[buf].buflisted = false
+				vim.bo[buf].swapfile = false
 				vim.fn.bufload(buf)
 				vim.bo[buf].filetype = "cs"
 			end)
