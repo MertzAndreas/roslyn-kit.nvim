@@ -185,7 +185,7 @@ end
 function M.setup()
 	vim.api.nvim_create_autocmd("VimEnter", {
 		once = true,
-		desc = "Initialise roslyn early if in cs file",
+		desc = "Initialise roslyn early if in cs project",
 		callback = function()
 			vim.schedule(function()
 				if not project.in_csharp_project() then

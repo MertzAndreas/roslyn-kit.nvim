@@ -46,7 +46,7 @@ end
 function M.in_csharp_project()
 	local found = vim.fs.find(function(name)
 		return name:match("%.slnx?$") or name:match("%.csproj$")
-	end, { path = vim.uv.cwd(), type = "file", limit = 1 })
+	end, { path = vim.uv.cwd(), upward = true, stop = vim.env.HOME, type = "file", limit = 1 })
 	return #found > 0
 end
 
